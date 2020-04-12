@@ -1,0 +1,8 @@
+{
+  "VATSIMURL": "http://cluster.data.vatsim.net/",
+  "VATSIMDATAFILE": "vatsim-data.txt",
+  "VATSIMINTERVAL": "5",
+  "ASCIICOLORVATBOARD": "7",
+  "ASCIICOLORARRIVALS": "2",
+  "ASCIICOLORDEPARTURES": "6"
+}

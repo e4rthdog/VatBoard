@@ -4,16 +4,22 @@ using System.IO;
 using System.Net;
 using ConsoleTable;
 using System.Linq;
-using System.Configuration;
+using Microsoft.Extensions.Configuration;
 
 namespace VatBoardCons
 {
     class Program
     {
+        public IConfiguration config;
+
         static void Main(string[] args)
         {
-            string remoteUri = ConfigurationManager.AppSettings.Get("VATSIMURL");
-            string fileName = ConfigurationManager.AppSettings.Get("VATSIMDATAFILE");
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("VatBoard.json", true, true)
+                .Build();
+
+            string remoteUri = config["VATSIMURL"];
+            string fileName = config["VATSIMDATAFILE"];
             string myStringWebResource = remoteUri + fileName;
             string lookFor;
             int refreshInterval;
@@ -21,17 +27,14 @@ namespace VatBoardCons
             var tableArrivals = new Table();
             var tableDepartures = new Table();
 
-
             Console.CursorSize = 100;
             Console.BackgroundColor = ConsoleColor.Black;
             Console.Clear();
 
-
-
             Util.typeWriter(
-                Util.ascVATSIM, 
+                Util.ascVATSIM,
                 4,
-                (ConsoleColor)Convert.ToInt32(ConfigurationManager.AppSettings.Get("ASCIICOLORVATBOARD")));
+                (ConsoleColor)Convert.ToInt32(config["ASCIICOLORVATBOARD"]));
 
             Util.WriteLn(
                 "\n(c) 2020 - Elias Stassinos  - More Info: http://www.estassinos.com/vatboard ",
@@ -49,7 +52,7 @@ namespace VatBoardCons
             {
                 tableArrivals.ClearRows();
                 tableDepartures.ClearRows();
-                VATSIMList = Util.DownloadVatsimData(myStringWebResource, fileName);
+                VATSIMList = Util.DownloadVatsimData(myStringWebResource, fileName, config["VATSIMINTERVAL"]);
                 tableArrivals.SetHeaders("Callsign", "Aircraft", "Departure", "Arrival", "TAS", "Altitude", "Distance To");
                 VATSIMList.Where(d => d.planned_destairport == lookFor).OrderBy(o => o.DistanceTo).ToList().ForEach(d =>
                 {
@@ -77,12 +80,12 @@ namespace VatBoardCons
                 });
 
                 Console.Clear();
-                Util.typeWriter(Util.ascARRIVALS, 4, (ConsoleColor)Convert.ToInt32(ConfigurationManager.AppSettings.Get("ASCIICOLORARRIVALS")));
+                Util.typeWriter(Util.ascARRIVALS, 4, (ConsoleColor)Convert.ToInt32(config["ASCIICOLORARRIVALS"]));
                 Util.typeWriter(tableArrivals.ToString(), 4);
                 System.Threading.Thread.Sleep(5000);
 
                 Console.Clear();
-                Util.typeWriter(Util.ascDEPARTURES, 4, (ConsoleColor)Convert.ToInt32(ConfigurationManager.AppSettings.Get("ASCIICOLORDEPARTURES")));
+                Util.typeWriter(Util.ascDEPARTURES, 4, (ConsoleColor)Convert.ToInt32(config["ASCIICOLORDEPARTURES"]));
                 Util.typeWriter(tableDepartures.ToString(), 4);
                 System.Threading.Thread.Sleep(refreshInterval * 1000);
             } while (true);

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 
 namespace VatBoardCons
 {
@@ -173,21 +173,21 @@ namespace VatBoardCons
             {
                 Console.Write(_str);
             }
-            
+
             Console.BackgroundColor = currentBackground;
             Console.ForegroundColor = currentForeground;
         }
 
-        public static List<VatLine> DownloadVatsimData(string _uri, string _filename)
+        public static List<VatLine> DownloadVatsimData(string _uri, string _filename, string _interval)
         {
             var Airports = new List<Airport>();
             List<VatLine> dataList = new List<VatLine>();
             DateTime lastDownload = File.GetLastWriteTime(_filename);
             TimeSpan span = DateTime.Now.Subtract(lastDownload);
             Airports = LoadAirports();
-            if (span.TotalMinutes > Convert.ToDouble(ConfigurationManager.AppSettings.Get("VATSIMINTERVAL")))
+            if (span.TotalMinutes > Convert.ToDouble(_interval))
             {
-                WriteLn("\nDownloading VATSIM data ...",ConsoleColor.Black,ConsoleColor.Yellow,false);
+                WriteLn("\nDownloading VATSIM data ...", ConsoleColor.Black, ConsoleColor.Yellow, false);
                 try
                 {
                     WebClient wc = new WebClient();
