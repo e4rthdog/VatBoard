@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -181,7 +182,7 @@ namespace VatBoardCons
             DateTime lastDownload = File.GetLastWriteTime(_filename);
             TimeSpan span = DateTime.Now.Subtract(lastDownload);
             Airports = LoadAirports();
-            if (span.TotalMinutes > 1)
+            if (span.TotalMinutes > Convert.ToDouble(ConfigurationManager.AppSettings.Get("VATSIMINTERVAL")))
             {
                 WriteLn("\nDownloading VATSIM data ...",ConsoleColor.Black,ConsoleColor.Yellow,false);
                 try
