@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
@@ -173,10 +174,13 @@ namespace VatBoardCons
             Console.ForegroundColor = currentForeground;
         }
 
-        public static void DownloadVatsimData(string _uri, string _filename)
+        public static List<VatLine> DownloadVatsimData(string _uri, string _filename)
         {
+            var Airports = new List<Airport>();
+            List<VatLine> dataList = new List<VatLine>();
             DateTime lastDownload = File.GetLastWriteTime(_filename);
             TimeSpan span = DateTime.Now.Subtract(lastDownload);
+            Airports = LoadAirports();
             if (span.TotalMinutes > 3)
             {
                 WriteLn("\nDownloading VATSIM data ...",ConsoleColor.Black,ConsoleColor.Yellow,false);
@@ -193,7 +197,64 @@ namespace VatBoardCons
                     Console.ReadKey();
                     System.Environment.Exit(-1);
                 }
+                string[] dataLines = File.ReadAllLines(_filename);
+                bool isPilot = false;
+                foreach (string dataLine in dataLines)
+                {
+                    if (isPilot && dataLine != "!SERVERS:")
+                    {
+                        string[] col = dataLine.Split(":");
+                        if (col[3] == "PILOT")
+                        {
+                            string user_lat_dep = "0.0";
+                            string user_lon_dep = "0.0";
+                            string user_lat_dest = "0.0";
+                            string user_lon_dest = "0.0";
+                            if (Airports.Any(x => x.code == col[11]))
+                            {
+                                user_lat_dep = Airports.Find(x => x.code == col[11]).lat;
+                                user_lon_dep = Airports.Find(x => x.code == col[11]).lon;
+                            }
+                            if (Airports.Any(x => x.code == col[13]))
+                            {
+                                user_lat_dest = Airports.Find(x => x.code == col[13]).lat;
+                                user_lon_dest = Airports.FirstOrDefault(x => x.code == col[13]).lon;
+                            }
+                            dataList.Add(new VatLine
+                            {
+                                callsign = col[0],
+                                planned_depairport = col[11],
+                                planned_destairport = col[13],
+                                planned_aircraft = col[9],
+                                planned_tascruise = col[10],
+                                altitude = col[7],
+                                lat = col[5],
+                                lon = col[6],
+                                DistanceTo = Util.distance(
+                                Convert.ToDouble(user_lat_dest.Replace(".", ",")),
+                                Convert.ToDouble(user_lon_dest.Replace(".", ",")),
+                                Convert.ToDouble(col[5].Replace(".", ",")),
+                                Convert.ToDouble(col[6].Replace(".", ",")), 'N'),
+                                DistanceFrom = Util.distance(
+                                Convert.ToDouble(user_lat_dep.Replace(".", ",")),
+                                Convert.ToDouble(user_lon_dep.Replace(".", ",")),
+                                Convert.ToDouble(col[5].Replace(".", ",")),
+                                Convert.ToDouble(col[6].Replace(".", ",")), 'N'),
+                            });
+                        }
+                    }
+
+                    if (dataLine == "!CLIENTS:")
+                    {
+                        isPilot = true;
+                    }
+                    if (dataLine == "!SERVERS:")
+                    {
+                        isPilot = false;
+                    }
+                }
             }
+            return dataList;
         }
 
         public static string GetVersion()

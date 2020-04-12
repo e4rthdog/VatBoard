@@ -17,15 +17,16 @@ namespace VatBoardCons
             string myStringWebResource = remoteUri + fileName;
             string lookFor;
             int refreshInterval;
+            var VATSIMList = new List<VatLine>();
             var tableArrivals = new Table();
             var tableDepartures = new Table();
-            var Airports = new List<Airport>();
+           
 
             Console.CursorSize = 100;
             Console.BackgroundColor = ConsoleColor.Black;
             Console.Clear();
 
-            Airports = Util.LoadAirports();
+       
 
             Util.typeWriter(Util.ascVATSIM, 4, ConsoleColor.DarkGray);
             Util.WriteLn(
@@ -42,68 +43,9 @@ namespace VatBoardCons
 
             do
             {
-                Util.DownloadVatsimData(myStringWebResource, fileName);
-
-                string[] dataLines = File.ReadAllLines(fileName);
-                List<VatLine> dataList = new List<VatLine>();
-                bool isPilot = false;
-                foreach (string dataLine in dataLines)
-                {
-                    if (isPilot && dataLine != "!SERVERS:")
-                    {
-                        string[] col = dataLine.Split(":");
-                        if (col[3] == "PILOT")
-                        {
-                            string user_lat_dep = "0.0";
-                            string user_lon_dep = "0.0";
-                            string user_lat_dest = "0.0";
-                            string user_lon_dest = "0.0";
-                            if (Airports.Any(x => x.code == col[11]))
-                            {
-                                user_lat_dep = Airports.Find(x => x.code == col[11]).lat;
-                                user_lon_dep = Airports.Find(x => x.code == col[11]).lon;
-                            }
-                            if (Airports.Any(x => x.code == col[13]))
-                            {
-                                user_lat_dest = Airports.Find(x => x.code == col[13]).lat;
-                                user_lon_dest = Airports.FirstOrDefault(x => x.code == col[13]).lon;
-                            }
-                            dataList.Add(new VatLine
-                            {
-                                callsign = col[0],
-                                planned_depairport = col[11],
-                                planned_destairport = col[13],
-                                planned_aircraft = col[9],
-                                planned_tascruise = col[10],
-                                altitude = col[7],
-                                lat = col[5],
-                                lon = col[6],
-                                DistanceTo = Util.distance(
-                                Convert.ToDouble(user_lat_dest.Replace(".", ",")),
-                                Convert.ToDouble(user_lon_dest.Replace(".", ",")),
-                                Convert.ToDouble(col[5].Replace(".", ",")),
-                                Convert.ToDouble(col[6].Replace(".", ",")), 'N'),
-                                DistanceFrom = Util.distance(
-                                Convert.ToDouble(user_lat_dep.Replace(".", ",")),
-                                Convert.ToDouble(user_lon_dep.Replace(".", ",")),
-                                Convert.ToDouble(col[5].Replace(".", ",")),
-                                Convert.ToDouble(col[6].Replace(".", ",")), 'N'),
-                            });
-                        }
-                    }
-
-                    if (dataLine == "!CLIENTS:")
-                    {
-                        isPilot = true;
-                    }
-                    if (dataLine == "!SERVERS:")
-                    {
-                        isPilot = false;
-                    }
-                }
-
+                VATSIMList = Util.DownloadVatsimData(myStringWebResource, fileName);
                 tableArrivals.SetHeaders("Callsign", "Aircraft", "Departure", "Arrival", "TAS", "Altitude", "Distance To");
-                dataList.Where(d => d.planned_destairport == lookFor).ToList().ForEach(d =>
+                VATSIMList.Where(d => d.planned_destairport == lookFor).ToList().ForEach(d =>
                 {
                     tableArrivals.AddRow(
                         d.callsign,
@@ -116,7 +58,7 @@ namespace VatBoardCons
                 });
 
                 tableDepartures.SetHeaders("Callsign", "Aircraft", "Departure", "Arrival", "TAS", "Altitude", "Distance From");
-                dataList.Where(d => d.planned_depairport == lookFor).ToList().ForEach(d =>
+                VATSIMList.Where(d => d.planned_depairport == lookFor).ToList().ForEach(d =>
                 {
                     tableDepartures.AddRow(
                           d.callsign,
