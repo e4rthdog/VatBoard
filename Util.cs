@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Text;
 
 namespace VatBoardCons
@@ -103,6 +104,7 @@ namespace VatBoardCons
 
         public static void typeWriter(string _str, int speed, ConsoleColor _col = ConsoleColor.White)
         {
+            ConsoleColor currentForeground = Console.ForegroundColor;
             Console.ForegroundColor = _col;
             for (int i = 0; i < _str.Length; i++)
             {
@@ -119,6 +121,7 @@ namespace VatBoardCons
                     Console.SetCursorPosition(0, 6);
                 }
             }
+            Console.ForegroundColor = currentForeground;
         }
 
         public static List<Airport> LoadAirports()
@@ -159,6 +162,19 @@ namespace VatBoardCons
             Console.WriteLine(_str);
             Console.BackgroundColor = currentBackground;
             Console.ForegroundColor = currentForeground;
+        }
+
+        public static void DownloadVatsimData(string _uri, string _filename)
+        {
+            DateTime lastDownload = File.GetLastWriteTime(@"vatsim-data.txt");
+            TimeSpan span = DateTime.Now.Subtract(lastDownload);
+            if (span.TotalMinutes > 3)
+            {
+                Console.Write("\nDownloading VATSIM data ...");
+                WebClient wc = new WebClient();
+                wc.DownloadFile(_uri, _filename);
+                Console.WriteLine("DONE!");
+            }
         }
 
     }

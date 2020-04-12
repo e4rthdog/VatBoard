@@ -12,41 +12,29 @@ namespace VatBoardCons
         static void Main(string[] args)
         {
             string remoteUri = "http://cluster.data.vatsim.net/";
-            string fileName = "vatsim-data.txt", myStringWebResource = null;
-            myStringWebResource = remoteUri + fileName;
+            string fileName = "vatsim-data.txt";
+            string myStringWebResource = remoteUri + fileName;
             string lookFor;
             int refreshInterval;
             var tableArrivals = new Table();
             var tableDepartures = new Table();
             var Airports = new List<Airport>();
 
-            Airports = Util.LoadAirports();
-
             Console.CursorSize = 100;
             Console.BackgroundColor = ConsoleColor.Black;
             Console.Clear();
 
-            Util.typeWriter(Util.ascVATSIM, 4, ConsoleColor.DarkGray);
-            Console.ForegroundColor = ConsoleColor.White;
+            Airports = Util.LoadAirports();
 
-            Console.BackgroundColor = ConsoleColor.DarkGreen;
-            Util.typeWriter("\n(c) 2020 - Elias Stassinos  - More Info: http://www.estassinos.com/vatboard - v1", 4, ConsoleColor.White);
-            Console.BackgroundColor = ConsoleColor.Black;
+            Util.typeWriter(Util.ascVATSIM, 4, ConsoleColor.DarkGray);
+            Util.WriteLn("\n(c) 2020 - Elias Stassinos  - More Info: http://www.estassinos.com/vatboard - v1", ConsoleColor.DarkGreen, ConsoleColor.White);
 
             lookFor = ReadLine.Read("\n\nAirport ICAO:", "").ToUpper();
             refreshInterval = Convert.ToInt32(ReadLine.Read("\nRefresh Interval (default 10sec):", "10"));
 
             do
             {
-                DateTime lastDownload = File.GetLastWriteTime(@"vatsim-data.txt");
-                TimeSpan span = DateTime.Now.Subtract(lastDownload);
-                if (span.TotalMinutes > 3)
-                {
-                    Console.Write("\nDownloading VATSIM data ...");
-                    WebClient wc = new WebClient();
-                    wc.DownloadFile(myStringWebResource, fileName);
-                    Console.WriteLine("DONE!");
-                }
+                Util.DownloadVatsimData(myStringWebResource, fileName);
 
                 string[] dataLines = File.ReadAllLines(fileName);
                 List<VatLine> dataList = new List<VatLine>();
