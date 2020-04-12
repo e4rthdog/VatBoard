@@ -6,6 +6,11 @@
     <Authors>Elias Stassinos</Authors>
     <Product />
     <ApplicationIcon>flight_121043.ico</ApplicationIcon>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Version>1.0</Version>
+    <RepositoryUrl>https://github.com/e4rthdog/VatBoard.git</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
