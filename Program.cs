@@ -133,12 +133,12 @@ namespace VatBoardCons
                 });
 
                 Console.Clear();
-                Util.typeWriter(Util.ascARRIVALS, 7, ConsoleColor.DarkGray);
+                Util.typeWriter(Util.ascARRIVALS, 4, ConsoleColor.DarkGray);
                 Util.typeWriter(tableArrivals.ToString(), 4);
                 System.Threading.Thread.Sleep(5000);
 
                 Console.Clear();
-                Util.typeWriter(Util.ascDEPARTURES, 7, ConsoleColor.DarkGray);
+                Util.typeWriter(Util.ascDEPARTURES, 4, ConsoleColor.DarkGray);
                 Util.typeWriter(tableDepartures.ToString(), 4);
                 System.Threading.Thread.Sleep(refreshInterval * 1000);
             } while (true);

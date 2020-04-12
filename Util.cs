@@ -108,13 +108,13 @@ namespace VatBoardCons
             {
                 Console.Write(_str[i]);
                 System.Threading.Thread.Sleep(speed);
-                if (Console.CursorTop == Console.WindowHeight-1 && Console.CursorLeft == 0)
+                if (Console.CursorTop == Console.WindowHeight - 1 && Console.CursorLeft == 0)
                 {
                     System.Threading.Thread.Sleep(4000);
-                    for( int _i = 6; _i <= Console.WindowHeight-1; _i++)
+                    for (int _i = 6; _i <= Console.WindowHeight - 1; _i++)
                     {
                         Console.SetCursorPosition(0, _i);
-                        Console.Write(new string(' ', Console.WindowWidth-2));
+                        Console.Write(new string(' ', Console.WindowWidth - 2));
                     }
                     Console.SetCursorPosition(0, 6);
                 }
@@ -147,6 +147,18 @@ namespace VatBoardCons
                 });
             }
             return _ret;
+        }
+
+        public static void WriteLn(string _str, ConsoleColor _background, ConsoleColor _foreground)
+        {
+            ConsoleColor currentBackground = Console.BackgroundColor;
+            ConsoleColor currentForeground = Console.ForegroundColor;
+
+            Console.BackgroundColor = _background;
+            Console.ForegroundColor = _foreground;
+            Console.WriteLine(_str);
+            Console.BackgroundColor = currentBackground;
+            Console.ForegroundColor = currentForeground;
         }
 
     }
