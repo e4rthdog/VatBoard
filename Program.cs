@@ -45,7 +45,7 @@ namespace VatBoardCons
             {
                 VATSIMList = Util.DownloadVatsimData(myStringWebResource, fileName);
                 tableArrivals.SetHeaders("Callsign", "Aircraft", "Departure", "Arrival", "TAS", "Altitude", "Distance To");
-                VATSIMList.Where(d => d.planned_destairport == lookFor).ToList().ForEach(d =>
+                VATSIMList.Where(d => d.planned_destairport == lookFor).OrderBy(o => o.DistanceTo).ToList().ForEach(d =>
                 {
                     tableArrivals.AddRow(
                         d.callsign,
@@ -58,7 +58,7 @@ namespace VatBoardCons
                 });
 
                 tableDepartures.SetHeaders("Callsign", "Aircraft", "Departure", "Arrival", "TAS", "Altitude", "Distance From");
-                VATSIMList.Where(d => d.planned_depairport == lookFor).ToList().ForEach(d =>
+                VATSIMList.Where(d => d.planned_depairport == lookFor).OrderBy(o => o.DistanceFrom).ToList().ForEach(d =>
                 {
                     tableDepartures.AddRow(
                           d.callsign,
