@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using ConsoleTable;
 using System.Linq;
+using System.Configuration;
 
 namespace VatBoardCons
 {
@@ -11,8 +12,8 @@ namespace VatBoardCons
     {
         static void Main(string[] args)
         {
-            string remoteUri = "http://cluster.data.vatsim.net/";
-            string fileName = "vatsim-data.txt";
+            string remoteUri = ConfigurationManager.AppSettings.Get("VATSIMURL");
+            string fileName = ConfigurationManager.AppSettings.Get("VATSIMDATAFILE"); 
             string myStringWebResource = remoteUri + fileName;
             string lookFor;
             int refreshInterval;
