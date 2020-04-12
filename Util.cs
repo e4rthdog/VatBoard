@@ -231,7 +231,7 @@ namespace VatBoardCons
                             planned_depairport = col[11],
                             planned_destairport = col[13],
                             planned_aircraft = col[9],
-                            planned_tascruise = col[10],
+                            planned_tascruise = col[8],
                             altitude = col[7],
                             lat = col[5],
                             lon = col[6],
