@@ -28,7 +28,11 @@ namespace VatBoardCons
 
 
 
-            Util.typeWriter(Util.ascVATSIM, 4, ConsoleColor.DarkGray);
+            Util.typeWriter(
+                Util.ascVATSIM, 
+                4,
+                (ConsoleColor)Convert.ToInt32(ConfigurationManager.AppSettings.Get("ASCIICOLORVATBOARD")));
+
             Util.WriteLn(
                 "\n(c) 2020 - Elias Stassinos  - More Info: http://www.estassinos.com/vatboard ",
                 ConsoleColor.DarkGreen,
@@ -73,12 +77,12 @@ namespace VatBoardCons
                 });
 
                 Console.Clear();
-                Util.typeWriter(Util.ascARRIVALS, 4, ConsoleColor.DarkGray);
+                Util.typeWriter(Util.ascARRIVALS, 4, (ConsoleColor)Convert.ToInt32(ConfigurationManager.AppSettings.Get("ASCIICOLORARRIVALS")));
                 Util.typeWriter(tableArrivals.ToString(), 4);
                 System.Threading.Thread.Sleep(5000);
 
                 Console.Clear();
-                Util.typeWriter(Util.ascDEPARTURES, 4, ConsoleColor.DarkGray);
+                Util.typeWriter(Util.ascDEPARTURES, 4, (ConsoleColor)Convert.ToInt32(ConfigurationManager.AppSettings.Get("ASCIICOLORDEPARTURES")));
                 Util.typeWriter(tableDepartures.ToString(), 4);
                 System.Threading.Thread.Sleep(refreshInterval * 1000);
             } while (true);

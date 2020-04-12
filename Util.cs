@@ -105,10 +105,12 @@ namespace VatBoardCons
             return (rad / Math.PI * 180.0);
         }
 
-        public static void typeWriter(string _str, int speed, ConsoleColor _col = ConsoleColor.White)
+        public static void typeWriter(string _str, int speed, ConsoleColor _colFG = ConsoleColor.White, ConsoleColor _colBG = ConsoleColor.Black)
         {
             ConsoleColor currentForeground = Console.ForegroundColor;
-            Console.ForegroundColor = _col;
+            ConsoleColor currentBackground = Console.BackgroundColor;
+            Console.ForegroundColor = _colFG;
+            Console.BackgroundColor = _colBG;
             for (int i = 0; i < _str.Length; i++)
             {
                 Console.Write(_str[i]);
@@ -125,6 +127,7 @@ namespace VatBoardCons
                 }
             }
             Console.ForegroundColor = currentForeground;
+            Console.BackgroundColor = currentBackground;
         }
 
         public static List<Airport> LoadAirports()
