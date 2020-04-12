@@ -5,14 +5,6 @@ A console application for VATSIM arrivals / departures for an airport
 
 Head to [VATBOARD PAGE](http://www.estassinos.com/vatboard) to get you started.
 
-### Prerequisites
-
-A Windows OS.
-
-### Installing
-
-Just unzip and run the executable.
-
 ## Built With
 
 * Visual Studio 2019
@@ -30,7 +22,4 @@ Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c6
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
 
