@@ -152,28 +152,46 @@ namespace VatBoardCons
             return _ret;
         }
 
-        public static void WriteLn(string _str, ConsoleColor _background, ConsoleColor _foreground)
+        public static void WriteLn(string _str, ConsoleColor _background, ConsoleColor _foreground, bool _lf = true)
         {
             ConsoleColor currentBackground = Console.BackgroundColor;
             ConsoleColor currentForeground = Console.ForegroundColor;
 
             Console.BackgroundColor = _background;
             Console.ForegroundColor = _foreground;
-            Console.WriteLine(_str);
+            if (_lf)
+            {
+                Console.WriteLine(_str);
+            }
+            else
+            {
+                Console.Write(_str);
+            }
+            
             Console.BackgroundColor = currentBackground;
             Console.ForegroundColor = currentForeground;
         }
 
         public static void DownloadVatsimData(string _uri, string _filename)
         {
-            DateTime lastDownload = File.GetLastWriteTime(@"vatsim-data.txt");
+            DateTime lastDownload = File.GetLastWriteTime(_filename);
             TimeSpan span = DateTime.Now.Subtract(lastDownload);
             if (span.TotalMinutes > 3)
             {
-                Console.Write("\nDownloading VATSIM data ...");
-                WebClient wc = new WebClient();
-                wc.DownloadFile(_uri, _filename);
-                Console.WriteLine("DONE!");
+                WriteLn("\nDownloading VATSIM data ...",ConsoleColor.Black,ConsoleColor.Yellow,false);
+                try
+                {
+                    WebClient wc = new WebClient();
+                    wc.DownloadFile(_uri, _filename);
+                    WriteLn("DONE!", ConsoleColor.Black, ConsoleColor.Yellow);
+                }
+                catch (WebException wex)
+                {
+                    WriteLn(String.Format("\nERROR!! => [{0}]]", wex.Message), ConsoleColor.Red, ConsoleColor.White);
+                    WriteLn(String.Format("Press any key to exit.", wex.Message), ConsoleColor.Red, ConsoleColor.White);
+                    Console.ReadKey();
+                    System.Environment.Exit(-1);
+                }
             }
         }
 
