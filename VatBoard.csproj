@@ -11,7 +11,16 @@
     <Version>1.0</Version>
     <RepositoryUrl>https://github.com/e4rthdog/VatBoard.git</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="version.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="version.txt" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="ReadLine" Version="2.0.1" />
@@ -26,5 +35,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="call version.bat" />
+  </Target>
 
 </Project>

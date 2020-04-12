@@ -1,0 +1,1 @@
+"C:\Program Files\Git\bin\git.exe" describe --long > ".\version.txt"

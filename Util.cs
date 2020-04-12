@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Text;
 
 namespace VatBoardCons
@@ -193,6 +194,18 @@ namespace VatBoardCons
                     System.Environment.Exit(-1);
                 }
             }
+        }
+
+        public static string GetVersion()
+        {
+            string gitVersion = String.Empty;
+            using (Stream stream = Assembly.GetExecutingAssembly()
+                    .GetManifestResourceStream("VatBoard.version.txt"))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                gitVersion = reader.ReadLine();
+            }
+            return gitVersion;
         }
 
     }

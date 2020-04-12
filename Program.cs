@@ -13,7 +13,7 @@ namespace VatBoardCons
         static void Main(string[] args)
         {
             string remoteUri = ConfigurationManager.AppSettings.Get("VATSIMURL");
-            string fileName = ConfigurationManager.AppSettings.Get("VATSIMDATAFILE"); 
+            string fileName = ConfigurationManager.AppSettings.Get("VATSIMDATAFILE");
             string myStringWebResource = remoteUri + fileName;
             string lookFor;
             int refreshInterval;
@@ -28,7 +28,14 @@ namespace VatBoardCons
             Airports = Util.LoadAirports();
 
             Util.typeWriter(Util.ascVATSIM, 4, ConsoleColor.DarkGray);
-            Util.WriteLn("\n(c) 2020 - Elias Stassinos  - More Info: http://www.estassinos.com/vatboard - v1", ConsoleColor.DarkGreen, ConsoleColor.White);
+            Util.WriteLn(
+                "\n(c) 2020 - Elias Stassinos  - More Info: http://www.estassinos.com/vatboard ",
+                ConsoleColor.DarkGreen,
+                ConsoleColor.White);
+            Util.WriteLn(
+                string.Format("\n\nVersion: {0} ", Util.GetVersion()),
+                ConsoleColor.DarkGreen,
+                ConsoleColor.White,false);
 
             lookFor = ReadLine.Read("\n\nAirport ICAO:", "").ToUpper();
             refreshInterval = Convert.ToInt32(ReadLine.Read("\nRefresh Interval (default 10sec):", "10"));
