@@ -181,7 +181,7 @@ namespace VatBoardCons
             DateTime lastDownload = File.GetLastWriteTime(_filename);
             TimeSpan span = DateTime.Now.Subtract(lastDownload);
             Airports = LoadAirports();
-            if (span.TotalMinutes > 3)
+            if (span.TotalMinutes > 1)
             {
                 WriteLn("\nDownloading VATSIM data ...",ConsoleColor.Black,ConsoleColor.Yellow,false);
                 try

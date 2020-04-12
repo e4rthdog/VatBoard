@@ -20,13 +20,13 @@ namespace VatBoardCons
             var VATSIMList = new List<VatLine>();
             var tableArrivals = new Table();
             var tableDepartures = new Table();
-           
+
 
             Console.CursorSize = 100;
             Console.BackgroundColor = ConsoleColor.Black;
             Console.Clear();
 
-       
+
 
             Util.typeWriter(Util.ascVATSIM, 4, ConsoleColor.DarkGray);
             Util.WriteLn(
@@ -36,13 +36,15 @@ namespace VatBoardCons
             Util.WriteLn(
                 string.Format("\n\nVersion: {0} ", Util.GetVersion()),
                 ConsoleColor.DarkGreen,
-                ConsoleColor.White,false);
+                ConsoleColor.White, false);
 
             lookFor = ReadLine.Read("\n\nAirport ICAO:", "").ToUpper();
             refreshInterval = Convert.ToInt32(ReadLine.Read("\nRefresh Interval (default 10sec):", "10"));
 
             do
             {
+                tableArrivals.ClearRows();
+                tableDepartures.ClearRows();
                 VATSIMList = Util.DownloadVatsimData(myStringWebResource, fileName);
                 tableArrivals.SetHeaders("Callsign", "Aircraft", "Departure", "Arrival", "TAS", "Altitude", "Distance To");
                 VATSIMList.Where(d => d.planned_destairport == lookFor).OrderBy(o => o.DistanceTo).ToList().ForEach(d =>
