@@ -206,7 +206,7 @@ namespace VatBoardCons
             bool isPilot = false;
             foreach (string dataLine in dataLines)
             {
-                if (isPilot && dataLine != "!SERVERS:")
+                if (isPilot && dataLine != "!SERVERS:" && dataLine.Contains(":PILOT:"))
                 {
                     string[] col = dataLine.Split(":");
                     if (col[3] == "PILOT")
