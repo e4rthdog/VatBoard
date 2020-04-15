@@ -1,16 +1,14 @@
-# VatBoard . Web
-
-VATBOARD . WEB - The web version of VATBOARD - A simple arrival departures board for VATSIM traffic.
-
-> VATBOARD is a retro console app you can find here: [VATBOARD](http://www.estassinos.com/vatboard)
+# VatBoard
+A console application for VATSIM arrivals / departures for an airport
 
 ## Getting Started
 
-Information on usage and location here: [VATBOARD.WEB Homepage](http://www.estassinos.com/vatboard-web)
+Head to [VATBOARD PAGE](http://www.estassinos.com/vatboard) to get you started.
 
 ## Built With
 
-* Plain html, css, javascript using NetBeans IDE
+* Visual Studio 2019
+* .NET Core 3.1
 
 ## Contributing
 
