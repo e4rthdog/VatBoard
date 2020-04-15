@@ -1,14 +1,16 @@
-# VatBoard
-A console application for VATSIM arrivals / departures for an airport
+# VatBoard . Web
+
+VATBOARD . WEB - The web version of VATBOARD - A simple arrival departures board for VATSIM traffic.
+
+> VATBOARD is a retro console app you can find here: [VATBOARD](http://www.estassinos.com/vatboard)
 
 ## Getting Started
 
-Head to [VATBOARD PAGE](http://www.estassinos.com/vatboard) to get you started.
+Information on usage and location here: [VATBOARD.WEB Homepage](http://www.estassinos.com/vatboard-web)
 
 ## Built With
 
-* Visual Studio 2019
-* .NET Core 3.1
+* Plain html, css, javascript using NetBeans IDE
 
 ## Contributing
 
@@ -21,5 +23,3 @@ Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c6
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-
