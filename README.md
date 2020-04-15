@@ -3,7 +3,7 @@ A console application for VATSIM arrivals / departures for an airport
 
 ## Getting Started
 
-Head to [VATBOARD PAGE](http://www.estassinos.com/vatboard) to get you started.
+Head to [VATBOARD PAGE](http://www.estassinos.com/vatboard-console) to get you started.
 
 ## Built With
 
