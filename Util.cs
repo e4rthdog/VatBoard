@@ -4,8 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Text;
-using Microsoft.Extensions.Configuration;
+using VatsimData;
 
 namespace VatBoardCons
 {
@@ -190,8 +189,7 @@ namespace VatBoardCons
                 WriteLn("\nDownloading VATSIM data ...", ConsoleColor.Black, ConsoleColor.Yellow, false);
                 try
                 {
-                    WebClient wc = new WebClient();
-                    wc.DownloadFile(_uri, _filename);
+                    VatsimData.VatsimData.GetData(_uri);
                     WriteLn("DONE!", ConsoleColor.Black, ConsoleColor.Yellow);
                 }
                 catch (WebException wex)
@@ -202,61 +200,50 @@ namespace VatBoardCons
                     System.Environment.Exit(-1);
                 }
             }
-            string[] dataLines = File.ReadAllLines(_filename);
-            bool isPilot = false;
-            foreach (string dataLine in dataLines)
+            var fp = new FlightPlan();
+            foreach (var pilot in VatsimData.VatsimData.Data.Pilots)
             {
-                if (isPilot && dataLine != "!SERVERS:" && dataLine.Contains(":PILOT:"))
+                string user_lat_dep = "0.0";
+                string user_lon_dep = "0.0";
+                string user_lat_dest = "0.0";
+                string user_lon_dest = "0.0";
+                if (pilot.FlightPlan != null)
                 {
-                    string[] col = dataLine.Split(":");
-                    if (col[3] == "PILOT")
+                    fp = (FlightPlan)pilot.FlightPlan;
+
+                    if (Airports.Any(x => x.code == fp.Departure))
                     {
-                        string user_lat_dep = "0.0";
-                        string user_lon_dep = "0.0";
-                        string user_lat_dest = "0.0";
-                        string user_lon_dest = "0.0";
-                        if (Airports.Any(x => x.code == col[11]))
-                        {
-                            user_lat_dep = Airports.Find(x => x.code == col[11]).lat;
-                            user_lon_dep = Airports.Find(x => x.code == col[11]).lon;
-                        }
-                        if (Airports.Any(x => x.code == col[13]))
-                        {
-                            user_lat_dest = Airports.Find(x => x.code == col[13]).lat;
-                            user_lon_dest = Airports.FirstOrDefault(x => x.code == col[13]).lon;
-                        }
-                        dataList.Add(new VatLine
-                        {
-                            callsign = col[0],
-                            planned_depairport = col[11],
-                            planned_destairport = col[13],
-                            planned_aircraft = col[9],
-                            planned_tascruise = col[8],
-                            altitude = col[7],
-                            lat = col[5],
-                            lon = col[6],
-                            DistanceTo = Util.distance(
-                            Convert.ToDouble(user_lat_dest.Replace(".", ",")),
-                            Convert.ToDouble(user_lon_dest.Replace(".", ",")),
-                            Convert.ToDouble(col[5].Replace(".", ",")),
-                            Convert.ToDouble(col[6].Replace(".", ",")), 'N'),
-                            DistanceFrom = Util.distance(
-                            Convert.ToDouble(user_lat_dep.Replace(".", ",")),
-                            Convert.ToDouble(user_lon_dep.Replace(".", ",")),
-                            Convert.ToDouble(col[5].Replace(".", ",")),
-                            Convert.ToDouble(col[6].Replace(".", ",")), 'N'),
-                        });
+                        user_lat_dep = Airports.Find(x => x.code == fp.Departure).lat;
+                        user_lon_dep = Airports.Find(x => x.code == fp.Departure).lon;
+                    }
+                    if (Airports.Any(x => x.code == fp.Arrival))
+                    {
+                        user_lat_dest = Airports.Find(x => x.code == fp.Arrival).lat;
+                        user_lon_dest = Airports.FirstOrDefault(x => x.code == fp.Arrival).lon;
                     }
                 }
 
-                if (dataLine == "!CLIENTS:")
+                dataList.Add(new VatLine
                 {
-                    isPilot = true;
-                }
-                if (dataLine == "!SERVERS:")
-                {
-                    isPilot = false;
-                }
+                    callsign = pilot.Callsign,
+                    planned_depairport = fp.Departure,
+                    planned_destairport = fp.Arrival,
+                    planned_aircraft = fp.Aircraft,
+                    planned_tascruise = fp.CruiseTAS,
+                    altitude = fp.Altitude,
+                    lat = pilot.Latitude.ToString(),
+                    lon = pilot.Longitude.ToString(),
+                    DistanceTo = Util.distance(
+                                    Convert.ToDouble(user_lat_dest.Replace(".", ",")),
+                                    Convert.ToDouble(user_lon_dest.Replace(".", ",")),
+                                    Convert.ToDouble(pilot.Latitude.ToString().Replace(".", ",")),
+                                    Convert.ToDouble(pilot.Longitude.ToString().Replace(".", ",")), 'N'),
+                    DistanceFrom = Util.distance(
+                                    Convert.ToDouble(user_lat_dep.Replace(".", ",")),
+                                    Convert.ToDouble(user_lon_dep.Replace(".", ",")),
+                                    Convert.ToDouble(pilot.Latitude.ToString().Replace(".", ",")),
+                                    Convert.ToDouble(pilot.Longitude.ToString().Replace(".", ",")), 'N'),
+                });
             }
             return dataList;
         }

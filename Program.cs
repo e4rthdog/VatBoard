@@ -52,7 +52,7 @@ namespace VatBoardCons
             {
                 tableArrivals.ClearRows();
                 tableDepartures.ClearRows();
-                VATSIMList = Util.DownloadVatsimData(myStringWebResource, fileName, config["VATSIMINTERVAL"]);
+                VATSIMList = Util.DownloadVatsimData("https://data.vatsim.net/v3/vatsim-data.json", fileName, config["VATSIMINTERVAL"]);
                 tableArrivals.SetHeaders("Callsign", "Aircraft", "Departure", "Arrival", "TAS", "Altitude", "Distance To");
                 VATSIMList.Where(d => d.planned_destairport == lookFor).OrderBy(o => o.DistanceTo).ToList().ForEach(d =>
                 {
