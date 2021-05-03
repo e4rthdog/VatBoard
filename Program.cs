@@ -37,7 +37,7 @@ namespace VatBoardCons
                 (ConsoleColor)Convert.ToInt32(config["ASCIICOLORVATBOARD"]));
 
             Util.WriteLn(
-                "\n(c) 2020 - Elias Stassinos  - More Info: http://www.estassinos.com/vatboard ",
+                "\n(c) 2021 - Elias Stassinos  - More Info: http://www.estassinos.com/vatboard ",
                 ConsoleColor.DarkGreen,
                 ConsoleColor.White);
             Util.WriteLn(
