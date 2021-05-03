@@ -19,8 +19,12 @@ namespace VatBoardCons
                 .Build();
 
             string remoteUri = config["VATSIMURL"];
-            string fileName = config["VATSIMDATAFILE"];
-            string myStringWebResource = remoteUri + fileName;
+
+            string dataFile = config["VATSIMDATAFILE"];
+            if (!File.Exists(dataFile))
+                File.Create(dataFile).Close();
+            Util.SetLastDownload(true, dataFile);
+
             string lookFor;
             int refreshInterval;
             var VATSIMList = new List<VatLine>();
@@ -52,7 +56,7 @@ namespace VatBoardCons
             {
                 tableArrivals.ClearRows();
                 tableDepartures.ClearRows();
-                VATSIMList = Util.DownloadVatsimData("https://data.vatsim.net/v3/vatsim-data.json", fileName, config["VATSIMINTERVAL"]);
+                VATSIMList = Util.DownloadVatsimData(remoteUri, dataFile, config["VATSIMINTERVAL"]);
                 tableArrivals.SetHeaders("Callsign", "Aircraft", "Departure", "Arrival", "TAS", "Altitude", "Distance To");
                 VATSIMList.Where(d => d.planned_destairport == lookFor).OrderBy(o => o.DistanceTo).ToList().ForEach(d =>
                 {

@@ -177,11 +177,11 @@ namespace VatBoardCons
             Console.ForegroundColor = currentForeground;
         }
 
-        public static List<VatLine> DownloadVatsimData(string _uri, string _filename, string _interval)
+        public static List<VatLine> DownloadVatsimData(string _uri, string dataFile, string _interval)
         {
             var Airports = new List<Airport>();
             List<VatLine> dataList = new List<VatLine>();
-            DateTime lastDownload = File.GetLastWriteTime(_filename);
+            DateTime lastDownload = File.GetLastWriteTime(dataFile);
             TimeSpan span = DateTime.Now.Subtract(lastDownload);
             Airports = LoadAirports();
             if (span.TotalMinutes > Convert.ToDouble(_interval))
@@ -191,11 +191,12 @@ namespace VatBoardCons
                 {
                     VatsimData.VatsimData.GetData(_uri);
                     WriteLn("DONE!", ConsoleColor.Black, ConsoleColor.Yellow);
+                    SetLastDownload(false, dataFile);
                 }
                 catch (WebException wex)
                 {
-                    WriteLn(String.Format("\nERROR!! => [{0}]]", wex.Message), ConsoleColor.Red, ConsoleColor.White);
-                    WriteLn(String.Format("Press any key to exit.", wex.Message), ConsoleColor.Red, ConsoleColor.White);
+                    WriteLn(string.Format("\nERROR!! => [{0}]]", wex.Message), ConsoleColor.Red, ConsoleColor.White);
+                    WriteLn(string.Format("Press any key to exit.", wex.Message), ConsoleColor.Red, ConsoleColor.White);
                     Console.ReadKey();
                     System.Environment.Exit(-1);
                 }
@@ -233,12 +234,12 @@ namespace VatBoardCons
                     altitude = fp.Altitude,
                     lat = pilot.Latitude.ToString(),
                     lon = pilot.Longitude.ToString(),
-                    DistanceTo = Util.distance(
+                    DistanceTo = distance(
                                     Convert.ToDouble(user_lat_dest.Replace(".", ",")),
                                     Convert.ToDouble(user_lon_dest.Replace(".", ",")),
                                     Convert.ToDouble(pilot.Latitude.ToString().Replace(".", ",")),
                                     Convert.ToDouble(pilot.Longitude.ToString().Replace(".", ",")), 'N'),
-                    DistanceFrom = Util.distance(
+                    DistanceFrom = distance(
                                     Convert.ToDouble(user_lat_dep.Replace(".", ",")),
                                     Convert.ToDouble(user_lon_dep.Replace(".", ",")),
                                     Convert.ToDouble(pilot.Latitude.ToString().Replace(".", ",")),
@@ -258,6 +259,18 @@ namespace VatBoardCons
                 gitVersion = reader.ReadLine();
             }
             return gitVersion;
+        }
+
+        public static void SetLastDownload(Boolean isFirstTime, string dataFile)
+        {
+            if (isFirstTime)
+            {
+                File.SetLastWriteTimeUtc(dataFile, new DateTime(1974, 3, 25));
+            }
+            else
+            {
+                File.SetLastWriteTimeUtc(dataFile, DateTime.UtcNow);
+            }
         }
 
     }
