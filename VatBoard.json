@@ -1,5 +1,5 @@
 {
-  "VATSIMURL": "http://cluster.data.vatsim.net/",
+  "VATSIMURL": "https://data.vatsim.net/v3/vatsim-data.json",
   "VATSIMDATAFILE": "vatsim-data.txt",
   "VATSIMINTERVAL": "5",
   "ASCIICOLORVATBOARD": "7",

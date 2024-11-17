@@ -31,8 +31,7 @@
 
   <ItemGroup>
     <Reference Include="VatsimData">
-      <HintPath>V:\_DEV\VatsimData\VatsimData\bin\Release\netstandard2.0\VatsimData.dll</HintPath>
-      <Private>true</Private>
+      <HintPath>..\VatsimData\VatsimData\bin\Debug\netstandard2.0\VatsimData.dll</HintPath>
     </Reference>
   </ItemGroup>
 
