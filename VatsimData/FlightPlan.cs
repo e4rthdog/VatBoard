@@ -20,7 +20,7 @@ namespace VatsimData
     {
         [JsonProperty("flight_rules")]
         public string FlightRules { get; set; }
-        [JsonProperty("aircraft")]
+        [JsonProperty("aircraft_faa")]
         public string Aircraft { get; set; }
         [JsonProperty("departure")]
         public string Departure { get; set; }
