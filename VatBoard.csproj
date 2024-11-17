@@ -30,18 +30,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="VatsimData">
-      <HintPath>..\VatsimData\VatsimData\bin\Debug\netstandard2.0\VatsimData.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="Airports.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="VatBoard.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="VatsimData\" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
